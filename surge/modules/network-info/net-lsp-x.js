@@ -37,8 +37,8 @@ if (isRequest()) {
 }
 
 $.lodash_set(arg, 'IPv6', 1)
-$.lodash_set(arg, 'LANDING_IPv4', "ipinfo")
-$.lodash_set(arg, 'LANDING_IPv6', "ipinfo")
+$.lodash_set(arg, 'LANDING_IPv4', "ipsb")
+$.lodash_set(arg, 'LANDING_IPv6', "ipsb")
 const keya = 'spe'
 const keyb = 'ge'
 const keyc = 'pin'
@@ -117,8 +117,8 @@ let content = ''
   let [
     { CN_IP = '', CN_INFO = '', CN_POLICY = '' } = {},
     { PROXY_IP = '', PROXY_INFO = '', PROXY_PRIVACY = '', PROXY_POLICY = '', ENTRANCE_IP = '' } = {},
-    { CN_IPv6 = '' } = {},
-    { PROXY_IPv6 = '' } = {},
+    { CN_IPv6 = ''} = {},
+    { PROXY_IPv6 = '', PROXY_INFO_6 = '' } = {},
   ] = await Promise.all(
     $.lodash_get(arg, 'IPv6') == 1
       ? [getDirectRequestInfo({ PROXIES }), getProxyRequestInfo({ PROXIES }), getDirectInfoIPv6(), getProxyInfoIPv6()]
@@ -183,12 +183,12 @@ let content = ''
     }
 
     if (CN_IPv6 && isIPv6(CN_IPv6) && $.lodash_get(arg, 'IPv6') == 1) {
-      CN_IPv6 = `\n${maskIP(CN_IPv6)}`
+      CN_IPv6 = `\n入口 IPV6: ${maskIP(CN_IPv6)}`
     } else {
       CN_IPv6 = ''
     }
     if (PROXY_IPv6 && isIPv6(PROXY_IPv6) && $.lodash_get(arg, 'IPv6') == 1) {
-      PROXY_IPv6 = `\n${maskIP(PROXY_IPv6)}`
+      PROXY_IPv6 = `\n落地 IPV6: ${maskIP(PROXY_IPv6)}`
     } else {
       PROXY_IPv6 = ''
     }
@@ -203,6 +203,7 @@ let content = ''
     if (CN_INFO) {
       CN_INFO = `\n${CN_INFO}`
     }
+
     const policy_prefix = $.isQuanX() || $.isLoon() ? '节点: ' : '代理策略: '
     if (PROXY_POLICY === 'DIRECT') {
       PROXY_POLICY = `${policy_prefix}直连`
@@ -220,10 +221,17 @@ let content = ''
     if (PROXY_INFO) {
       PROXY_INFO = `\n${PROXY_INFO}`
     }
+    if (PROXY_INFO_6) {
+        PROXY_INFO_6 = `\n${PROXY_INFO_6}`
+      }
+    else {
+        PROXY_INFO_6 = ''
+    }
+
     title = `${PROXY_POLICY}`
-    content = `${SSID}${LAN}${CN_POLICY}IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
+    content = `${SSID}${LAN}${CN_POLICY}入口 IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
       CN_INFO
-    )}\n\n${ENTRANCE}落地 IP: ${maskIP(PROXY_IP) || '-'}${PROXY_IPv6}${maskAddr(PROXY_INFO)}${PROXY_PRIVACY}`
+    )}\n\n${ENTRANCE}落地 IP: ${maskIP(PROXY_IP) || '-'}${PROXY_IPv6}${maskAddr(PROXY_INFO)}${maskAddr(PROXY_INFO_6)}${PROXY_PRIVACY}`
     if (!isInteraction()) {
       content = `${content}\n执行时间: ${new Date().toTimeString().split(' ')[0]}`
     }
@@ -240,7 +248,8 @@ let content = ''
             .replace(/\ +/g, ' ')
             .trim(),
           `${maskAddr(PROXY_INFO.replace(/(位置|运营商).*?:/g, '').replace(/\n/g, ' '))}${
-            CN_IPv6 ? `\n🄳 ${CN_IPv6.replace(/\n+/g, '')}` : ''
+            CN_IPv6 ? `
+            \n🄳 ${CN_IPv6.replace(/\n+/g, '')}` : ''
           }${PROXY_IPv6 ? `\n🅿 ${PROXY_IPv6.replace(/\n+/g, '')}` : ''}${SSID ? `\n${SSID}` : '\n'}${LAN}`
             .replace(/\n+/g, '\n')
             .replace(/\ +/g, ' ')
@@ -1036,6 +1045,7 @@ async function getProxyInfo(ip, provider) {
 }
 async function getProxyInfoIPv6(ip) {
   let PROXY_IPv6
+  let PROXY_INFO_6
   const msg = `使用 ${$.lodash_get(arg, 'LANDING_IPv6') || 'ipsb'} 查询 IPv6 分流信息`
   if ($.lodash_get(arg, 'LANDING_IPv6') == 'ident') {
     try {
@@ -1074,20 +1084,52 @@ async function getProxyInfoIPv6(ip) {
       const res = await http({
         ...(ip ? {} : getNodeOpt()),
 
-        url: `https://api-ipv6.ip.sb/ip`,
+        // url: `https://api-ipv6.ip.sb/ip`,
+        
+        url: `https://api-ipv6.ip.sb/geoip${ip ? `/${encodeURIComponent(ip)}` : ''}`,
         headers: {
           'User-Agent':
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.14',
         },
       })
       let body = String($.lodash_get(res, 'body'))
-      PROXY_IPv6 = body.trim()
+    //   PROXY_IPv6 = body.trim()
+      try {
+        body = JSON.parse(body)
+      } catch (e) {}
+      PROXY_IPv6 = $.lodash_get(body, 'ip')
+      if (PROXY_IPv6) {
+        
+      PROXY_INFO_6 = [
+        [
+          'IPV6位置:',
+          getflag($.lodash_get(body, 'country_code')),
+          $.lodash_get(body, 'country'),
+          $.lodash_get(body, 'region'),
+          $.lodash_get(body, 'city'),
+        ]
+          .filter(i => i)
+          .join(' '),
+
+        ['IPV6运营商:', body.isp || body.organization].filter(i => i).join(' '),
+        $.lodash_get(arg, 'ORG') == 1
+          ? ['组织:', $.lodash_get(body, 'asn_organization') || '-'].filter(i => i).join(' ')
+          : undefined,
+
+        $.lodash_get(arg, 'ASN') == 1 ? ['ASN:', $.lodash_get(body, 'asn') || '-'].filter(i => i).join(' ') : undefined,
+      ]
+        .filter(i => i)
+        .join('\n')
+    }
+    else{
+        PROXY_INFO_6 = ''
+    }
     } catch (e) {
       $.logErr(`${msg} 发生错误: ${e.message || e}`)
     }
   }
 
-  return { PROXY_IPv6 }
+  return { PROXY_IPv6, PROXY_INFO_6: simplifyAddr(PROXY_INFO_6) }
 }
 async function ipim(ip) {
   let isCN
