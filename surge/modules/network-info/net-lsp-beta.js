@@ -37,8 +37,8 @@ if (isRequest()) {
 }
 
 $.lodash_set(arg, 'IPv6', 1)
-$.lodash_set(arg, 'LANDING_IPv4', "ipinfo")
-$.lodash_set(arg, 'LANDING_IPv6', "ipinfo")
+$.lodash_set(arg, 'LANDING_IPv4', "ipsb")
+$.lodash_set(arg, 'LANDING_IPv6', "ipsb")
 const keya = 'spe'
 const keyb = 'ge'
 const keyc = 'pin'
