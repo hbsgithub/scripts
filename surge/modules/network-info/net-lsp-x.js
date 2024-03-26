@@ -27,6 +27,7 @@ if (typeof $environment !== 'undefined' && $.lodash_get($environment, 'executor'
 if (!isInteraction() && !isRequest() && !isTile() && !isPanel()) {
   $.log(`参数为空 非可交互操作, 非请求, 非面板的情况下, 修正运行环境`)
   $.lodash_set(arg, 'TYPE', 'EVENT')
+  $.lodash_set(arg, 'IPv6', 1)
 }
 
 if (isRequest()) {
