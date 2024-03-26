@@ -226,8 +226,20 @@ let content = ''
     else {
         PROXY_INFO_6 = ''
     }
+    if (CN_IPv6) {
+        CN_IPv6 = `入口 IPV6: ${CN_IPv6}`
+        }
+    else {
+        PROXY_IPv6 = ''
+    }
+    if (PROXY_IPv6) {
+        PROXY_IPv6 = `落地 IPV6: ${PROXY_IPv6}`
+        }
+    else {
+        PROXY_IPv6 = ''
+    }
     title = `${PROXY_POLICY}`
-    content = `${SSID}${LAN}${CN_POLICY}IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
+    content = `${SSID}${LAN}${CN_POLICY}入口 IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
       CN_INFO
     )}\n\n${ENTRANCE}落地 IP: ${maskIP(PROXY_IP) || '-'}${PROXY_IPv6}${maskAddr(PROXY_INFO)}${maskAddr(PROXY_INFO_6)}${PROXY_PRIVACY}`
     if (!isInteraction()) {
@@ -1097,6 +1109,7 @@ async function getProxyInfoIPv6(ip) {
       } catch (e) {}
       PROXY_IPv6 = $.lodash_get(body, 'ip')
       if (PROXY_IPv6) {
+        
       PROXY_INFO_6 = [
         [
           'IPV6位置:',
