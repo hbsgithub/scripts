@@ -1079,20 +1079,23 @@ async function getProxyInfoIPv6(ip) {
       const res = await http({
         ...(ip ? {} : getNodeOpt()),
 
-        url: `https://api-ipv6.ip.sb/ip`,
+        // url: `https://api-ipv6.ip.sb/ip`,
+        
+        url: `https://api-ipv6.ip.sb/geoip${ip ? `/${encodeURIComponent(ip)}` : ''}`,
         headers: {
           'User-Agent':
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.14',
         },
       })
       let body = String($.lodash_get(res, 'body'))
-      PROXY_IPv6 = body.trim()
+    //   PROXY_IPv6 = body.trim()
       try {
         body = JSON.parse(body)
       } catch (e) {}
+      PROXY_IPv6 = $.lodash_get(body, 'ip')
       PROXY_INFO_6 = [
         [
-          '位置:',
+          'IPV6位置:',
           getflag($.lodash_get(body, 'country_code')),
           $.lodash_get(body, 'country'),
           $.lodash_get(body, 'region'),
@@ -1101,7 +1104,7 @@ async function getProxyInfoIPv6(ip) {
           .filter(i => i)
           .join(' '),
 
-        ['运营商:', body.isp || body.organization].filter(i => i).join(' '),
+        ['IPV6运营商:', body.isp || body.organization].filter(i => i).join(' '),
         $.lodash_get(arg, 'ORG') == 1
           ? ['组织:', $.lodash_get(body, 'asn_organization') || '-'].filter(i => i).join(' ')
           : undefined,
