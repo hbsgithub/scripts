@@ -1096,6 +1096,7 @@ async function getProxyInfoIPv6(ip) {
         body = JSON.parse(body)
       } catch (e) {}
       PROXY_IPv6 = $.lodash_get(body, 'ip')
+      if (PROXY_IPv6) {
       PROXY_INFO_6 = [
         [
           'IPV6位置:',
@@ -1116,6 +1117,10 @@ async function getProxyInfoIPv6(ip) {
       ]
         .filter(i => i)
         .join('\n')
+    }
+    else{
+        PROXY_INFO_6 = ''
+    }
     } catch (e) {
       $.logErr(`${msg} 发生错误: ${e.message || e}`)
     }
