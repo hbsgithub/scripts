@@ -850,7 +850,7 @@ async function DirectInfoIPv6_ipsb(ip){
   } catch (e) {
     $.logErr(`${msg} 发生错误: ${e.message || e}`)
   }
-  return { CN_INFO_6: simplifyAddr(CN_INFO_6) }
+  return { CN_INFO_6 }
 }
 async function getProxyInfo(ip, provider) {
   let PROXY_IP
