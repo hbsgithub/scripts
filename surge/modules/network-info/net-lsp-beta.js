@@ -766,7 +766,7 @@ async function getDirectInfo(ip, provider) {
   }
   return { CN_IP, CN_INFO: simplifyAddr(CN_INFO), isCN }
 }
-async function getDirectInfoIPv6(ip) {
+async function getDirectInfoIPv6() {
   let CN_IPv6
   let CN_INFO_6
   const msg = `使用 ${$.lodash_get(arg, 'DOMESTIC_IPv6') || 'ddnspod'} 查询 IPv6 分流信息`
@@ -803,6 +803,8 @@ async function getDirectInfoIPv6(ip) {
   return { CN_IPv6, CN_INFO_6: simplifyAddr(CN_INFO_6) }
 }
 async function DirectInfoIPv6_ipsb(ip){
+  let CN_IPv6_1
+  let CN_INFO_6_1
   try {
     const res = await http({
       ...(ip ? {} : getNodeOpt()),
@@ -820,10 +822,10 @@ async function DirectInfoIPv6_ipsb(ip){
     try {
       body = JSON.parse(body)
     } catch (e) {}
-    CN_IPv6 = $.lodash_get(body, 'ip')
-    if (CN_IPv6) {
+    CN_IPv6_1 = $.lodash_get(body, 'ip')
+    if (CN_IPv6_1) {
       
-    CN_INFO_6 = [
+    CN_INFO_6_1 = [
       [
         'IPV6位置:',
         getflag($.lodash_get(body, 'country_code')),
@@ -845,12 +847,12 @@ async function DirectInfoIPv6_ipsb(ip){
       .join('\n')
   }
   else{
-      CN_INFO_6 = ''
+      CN_INFO_6_1 = ''
   }
   } catch (e) {
     $.logErr(`${msg} 发生错误: ${e.message || e}`)
   }
-  return { CN_INFO_6 }
+  return { CN_INFO_6_1 }
 }
 async function getProxyInfo(ip, provider) {
   let PROXY_IP
