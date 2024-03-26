@@ -1087,6 +1087,9 @@ async function getProxyInfoIPv6(ip) {
       })
       let body = String($.lodash_get(res, 'body'))
       PROXY_IPv6 = body.trim()
+      try {
+        body = JSON.parse(body)
+      } catch (e) {}
       PROXY_INFO_6 = [
         [
           '位置:',
