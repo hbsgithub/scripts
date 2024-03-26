@@ -802,16 +802,14 @@ async function getDirectInfoIPv6() {
       try {
         body = JSON.parse(body)
       } catch (e) {}
-      const countryCode = $.lodash_get(body, 'country_code')
-      isCN = countryCode === 'CN'
       CN_IPv6 = $.lodash_get(body, 'ip')
       if (CN_IPv6) {
         
       CN_INFO_6 = [
         [
           'IPV6位置:',
-          getflag(countryCode),
-          $.lodash_get(body, 'country').replace(/\s*中国\s*/, ''),
+          getflag($.lodash_get(body, 'country_code')),
+          $.lodash_get(body, 'country'),
           $.lodash_get(body, 'region'),
           $.lodash_get(body, 'city'),
         ]
