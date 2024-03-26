@@ -766,7 +766,7 @@ async function getDirectInfo(ip, provider) {
   }
   return { CN_IP, CN_INFO: simplifyAddr(CN_INFO), isCN }
 }
-async function getDirectInfoIPv6() {
+async function getDirectInfoIPv6(ip) {
   let CN_IPv6
   let CN_INFO_6
   const msg = `使用 ${$.lodash_get(arg, 'DOMESTIC_IPv6') || 'ddnspod'} 查询 IPv6 分流信息`
