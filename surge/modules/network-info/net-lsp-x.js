@@ -36,6 +36,9 @@ if (isRequest()) {
   $.log(`从请求后读取参数后: ${$.toStr(arg)}`)
 }
 
+$.lodash_set(arg, 'IPv6', 1)
+$.lodash_set(arg, 'LANDING_IPv4', "ipinfo")
+$.lodash_set(arg, 'LANDING_IPv6', "ipinfo")
 const keya = 'spe'
 const keyb = 'ge'
 const keyc = 'pin'
