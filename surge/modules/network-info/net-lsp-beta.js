@@ -223,6 +223,9 @@ let content = ''
     if (PROXY_INFO_6) {
         PROXY_INFO_6 = `\n${PROXY_INFO_6}`
       }
+    else {
+        PROXY_INFO_6 = ''
+    }
     title = `${PROXY_POLICY}`
     content = `${SSID}${LAN}${CN_POLICY}IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
       CN_INFO
