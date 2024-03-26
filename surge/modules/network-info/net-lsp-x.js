@@ -72,7 +72,7 @@ let content = ''
     if (v4 && $.lodash_get(arg, 'LAN') == 1) {
       LAN_IPv4 = v4
     }
-    if (v6 && $.lodash_get(arg, 'LAN') == 1 && $.lodash_get(arg, 'IPv6') == 1) {
+    if (v6 && $.lodash_get(arg, 'LAN') == 1) {
       LAN_IPv6 = v6
     }
   } else if (typeof $config !== 'undefined') {
