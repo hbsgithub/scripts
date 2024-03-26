@@ -229,9 +229,9 @@ let content = ''
     }
 
     title = `${PROXY_POLICY}`
-    content = `${SSID}${LAN}${CN_POLICY}入口 IP: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
+    content = `${SSID}${LAN}${CN_POLICY}入口 IPV4: ${maskIP(CN_IP) || '-'}${CN_IPv6}${maskAddr(
       CN_INFO
-    )}\n\n${ENTRANCE}落地 IP: ${maskIP(PROXY_IP) || '-'}${PROXY_IPv6}${maskAddr(PROXY_INFO)}${maskAddr(PROXY_INFO_6)}${PROXY_PRIVACY}`
+    )}\n\n${ENTRANCE}落地 IPV4: ${maskIP(PROXY_IP) || '-'}${PROXY_IPv6}${maskAddr(PROXY_INFO)}${maskAddr(PROXY_INFO_6)}${PROXY_PRIVACY}`
     if (!isInteraction()) {
       content = `${content}\n执行时间: ${new Date().toTimeString().split(' ')[0]}`
     }
@@ -741,7 +741,7 @@ async function getDirectInfo(ip, provider) {
         CN_IP = body.ip
         CN_INFO = [
           [
-            '位置:',
+            'IPV4位置:',
             getflag(countryCode),
             body.country.replace(/\s*中国\s*/, ''),
             body.province,
@@ -750,7 +750,7 @@ async function getDirectInfo(ip, provider) {
           ]
             .filter(i => i)
             .join(' '),
-          ['运营商:', body.net_str || body.operator || body.isp].filter(i => i).join(' '),
+          ['IPV4运营商:', body.net_str || body.operator || body.isp].filter(i => i).join(' '),
         ]
           .filter(i => i)
           .join('\n')
@@ -914,7 +914,7 @@ async function getProxyInfo(ip, provider) {
       PROXY_IP = ip || $.lodash_get(body, 'ip')
       PROXY_INFO = [
         [
-          '位置:',
+          'IPV4位置:',
           getflag($.lodash_get(body, 'country_code')),
           $.lodash_get(body, 'country'),
           $.lodash_get(body, 'region'),
@@ -923,7 +923,7 @@ async function getProxyInfo(ip, provider) {
           .filter(i => i)
           .join(' '),
 
-        ['运营商:', body.isp || body.organization].filter(i => i).join(' '),
+        ['IPV4运营商:', body.isp || body.organization].filter(i => i).join(' '),
         $.lodash_get(arg, 'ORG') == 1
           ? ['组织:', $.lodash_get(body, 'asn_organization') || '-'].filter(i => i).join(' ')
           : undefined,
