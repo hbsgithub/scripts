@@ -21,6 +21,7 @@ $.log(`从持久化存储读取参数后: ${$.toStr(arg)}`)
 if (typeof $environment !== 'undefined' && $.lodash_get($environment, 'executor') === 'event-network') {
   $.log(`QX 事件脚本不能带参 修正运行环境`)
   $.lodash_set(arg, 'TYPE', 'EVENT')
+  $.lodash_set(arg, 'IPv6', 1)
 }
 
 if (!isInteraction() && !isRequest() && !isTile() && !isPanel()) {
