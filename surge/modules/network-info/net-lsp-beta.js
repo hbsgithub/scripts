@@ -21,13 +21,13 @@ $.log(`从持久化存储读取参数后: ${$.toStr(arg)}`)
 if (typeof $environment !== 'undefined' && $.lodash_get($environment, 'executor') === 'event-network') {
   $.log(`QX 事件脚本不能带参 修正运行环境`)
   $.lodash_set(arg, 'TYPE', 'EVENT')
-  $.lodash_set(arg, 'IPv6', 1)
+  //$.lodash_set(arg, 'IPv6', 1)
 }
 
 if (!isInteraction() && !isRequest() && !isTile() && !isPanel()) {
   $.log(`参数为空 非可交互操作, 非请求, 非面板的情况下, 修正运行环境`)
   $.lodash_set(arg, 'TYPE', 'EVENT')
-  $.lodash_set(arg, 'IPv6', 1)
+  //$.lodash_set(arg, 'IPv6', 1)
 }
 
 if (isRequest()) {
@@ -794,24 +794,7 @@ async function getDirectInfoIPv6() {
   //     })
   //     let body = String($.lodash_get(res, 'body'))
   //     CN_IPv6 = body.trim()
-  //     let geoInfo = await getGeoInfo(CN_IPv6)
-  //     CN_INFO_6 = [
-  //       [
-  //         'IPV6位置:',
-  //         getflag($.lodash_get(geoInfo, 'country_code')),
-  //         $.lodash_get(geoInfo, 'country'),
-  //         $.lodash_get(geoInfo, 'region'),
-  //         $.lodash_get(geoInfo, 'city'),
-  //       ]
-  //         .filter(i => i)
-  //         .join(' '),
-  //       ['IPV6运营商:', $.lodash_get(geoInfo, 'isp') || $.lodash_get(geoInfo, 'organization')].filter(i => i).join(' '),
-  //       $.lodash_get(arg, 'ORG') == 1
-  //         ? ['组织:', $.lodash_get(geoInfo, 'asn_organization') || '-'].filter(i => i).join(' ')
-  //         : undefined,
-  //       $.lodash_get(arg, 'ASN') == 1 ? ['ASN:', $.lodash_get(geoInfo, 'asn') || '-'].filter(i => i).join(' ') : undefined,
-  //     ]
-  //     // console.log(`CN_IPv6: ${CN_IPv6}`); // Log the IPV6 address
+  //     
   //   }
   //   catch (e) {
   //     console.log(`${msg} 发生错误: ${e.message || e}`) // Log any error in the process
@@ -825,13 +808,12 @@ async function getDirectInfoIPv6() {
             'User-Agent':
               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.14',
           },
-          // timeout: 10000
         })
         let body = String($.lodash_get(res, 'body'))
-    //   PROXY_IPv6 = body.trim()
       try {
         body = JSON.parse(body)
-      } catch (e) {}
+      } catch (e) {console.log(`${msg} 发生错误: ${e.message || e}`) // Log any error in the process
+				}
       CN_IPv6 = $.lodash_get(body, 'ip')
       if (CN_IPv6) {
         
