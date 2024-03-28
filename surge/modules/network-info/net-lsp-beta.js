@@ -37,7 +37,7 @@ if (isRequest()) {
 }
 
 $.lodash_set(arg, 'IPv6', 1)
-$.lodash_set(arg, 'LANDING_IPv4', "ipsb")
+//$.lodash_set(arg, 'LANDING_IPv4', "ipsb")
 $.lodash_set(arg, 'LANDING_IPv6', "ipsb")
 const keya = 'spe'
 const keyb = 'ge'
@@ -1073,7 +1073,7 @@ async function getProxyInfo(ip, provider) {
       PROXY_IP = ip || $.lodash_get(body, 'query')
       PROXY_INFO = [
         [
-          '位置:',
+          'IPV4位置:',
           getflag(body.countryCode),
           body.country.replace(/\s*中国\s*/, ''),
           body.regionName ? body.regionName.split(/\s+or\s+/)[0] : body.regionName,
@@ -1081,7 +1081,7 @@ async function getProxyInfo(ip, provider) {
         ]
           .filter(i => i)
           .join(' '),
-        ['运营商:', body.isp || body.org || body.as].filter(i => i).join(' '),
+        ['IPV4运营商:', body.isp || body.org || body.as].filter(i => i).join(' '),
         $.lodash_get(arg, 'ORG') == 1
           ? ['组织:', $.lodash_get(body, 'org') || '-'].filter(i => i).join(' ')
           : undefined,
